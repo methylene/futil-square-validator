@@ -1,4 +1,9 @@
 futil-square-validator
 ======================
 
-example project that uses futil
+An example project that uses futil.
+
+Run it with 
+
+
+	mvn jetty:run-war
