@@ -41,6 +41,9 @@ div.display-row {margin: 2px 0 6px 0}
 div.display-label {float:left;width: 160px;font-weight:bold}
 div.display-value {float:left}
 
+ul {list-style:none;margin:0;padding:0}
+ul li {margin:0;padding:0}
+
 </style>
 
 <ui:insert name="style" />
@@ -51,11 +54,7 @@ div.display-value {float:left}
 
 <div class="container">
 	<div class="span-24"  style="margin:20px 0">
-	<ui:fragment rendered="#{not empty requestScope['org.meth4j.futil.message']}">
-		<div id="global-msg" class="span-24">
-			<div class="#{requestScope['org.meth4j.futil.message']['severity']}">#{requestScope['org.meth4j.futil.message']['message']}</div>
-		</div>
-	</ui:fragment>
+	<h:messages globalOnly="true" errorClass="error" infoClass="info" />
 	<ui:insert name="main" />
 	</div>
 </div>
