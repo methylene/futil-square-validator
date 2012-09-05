@@ -15,7 +15,7 @@
 			<h:inputText id="#{id}" value="#{value}"
 				styleClass="#{empty requestScope['org.meth4j.futil.errors'][id] ? 'all-good' : 'something-wrong'}">
 				<f:converter converterId="#{converterId}" />
-				<f:attribute rendered="#{not empty attribute}" name="org.meth4j.futil.attribute" value="#{attribute}" />
+				<f:attribute name="org.meth4j.futil.attribute" value="#{empty attribute ? null : attribute}" />
 			</h:inputText>
 			
 			<h:message errorClass="something-wrong" for="#{id}" />
