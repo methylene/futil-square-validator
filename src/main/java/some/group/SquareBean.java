@@ -1,12 +1,12 @@
 package some.group;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+import static org.meth4j.futil.FlashMesg.info;
+import static org.meth4j.futil.Messages.flash;
+import static some.group.SquareMethods.area;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-
-import org.meth4j.futil.Message;
-import org.meth4j.futil.Messages;
-
-import com.google.common.base.Preconditions;
 
 @ManagedBean
 @RequestScoped
@@ -16,10 +16,10 @@ public class SquareBean {
 	private UnitOfLength unit;
 	
 	public String action() {
-		Preconditions.checkNotNull(side);
-		Preconditions.checkNotNull(unit);
-		double area = SquareMethods.area(side, unit);
-		Messages.flash(Message.info(Key.INFO_SUCCESS));
+		checkNotNull(side);
+		checkNotNull(unit);
+		final double area = area(side, unit);
+		flash(info(Key.INFO_SUCCESS));
 		return "/outcome?faces-redirect=true&amp;area="+area;
 	}
 
