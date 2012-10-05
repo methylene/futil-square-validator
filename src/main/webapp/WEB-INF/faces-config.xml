@@ -11,7 +11,7 @@
 		</locale-config>
 
 		<resource-bundle>
-			<base-name>org.meth4j.futil.messages</base-name>
+			<base-name>org.somegroup.mesg</base-name>
 			<var>msg</var>
 		</resource-bundle>
 
