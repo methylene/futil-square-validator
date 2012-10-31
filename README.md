@@ -3,7 +3,10 @@ futil-square-validator
 
 An example project that uses futil.
 
-Run it with 
+Build and run with 
 
+	mvn clean jetty:run-exploded
 
-	mvn jetty:run-war
+Quickly update .xhtml files and static resouces (e.g. javascript) in running app:
+
+	./explode.sh
