@@ -15,10 +15,18 @@
 			<var>msg</var>
 		</resource-bundle>
 
+    <state-manager>com.industrieit.jsf.stateless.impl.SJSFStateManager</state-manager> 
+    <view-handler>com.industrieit.jsf.stateless.impl.SJSFViewHandler</view-handler>
+
 	</application>
+
+    <factory>
+        <view-declaration-language-factory>com.industrieit.jsf.stateless.impl.SJSFVDLFactory</view-declaration-language-factory>
+    </factory>
 
 	<lifecycle>
 		<phase-listener>org.meth4j.futil.MessageFilter</phase-listener>
+		<phase-listener>com.industrieit.jsf.stateless.impl.SJSFPhaseListener</phase-listener>
 	</lifecycle>
 
 	<converter>
