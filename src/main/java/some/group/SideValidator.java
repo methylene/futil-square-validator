@@ -1,32 +1,33 @@
 package some.group;
 
+import static org.meth4j.futil.CommonKey.ERROR_TOO_LARGE;
+import static org.meth4j.futil.Message.errMesg;
 import static org.meth4j.futil.Validate.integer;
 import static org.meth4j.futil.Validate.positive;
+import static org.meth4j.futil.Validate.requiredString;
+import static some.group.SquareMethods.area;
+import static some.group.UnitOfLength.valueOf;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectOne;
 import javax.faces.context.FacesContext;
-import javax.faces.convert.FacesConverter;
+import javax.faces.validator.FacesValidator;
+import javax.faces.validator.ValidatorException;
 
-import org.meth4j.futil.CommonKey;
-import org.meth4j.futil.ValidatingIntConverter;
-import org.meth4j.futil.ValidatorException;
-import org.slf4j.LoggerFactory;
+import org.meth4j.futil.ValidatingConverter;
 
-@FacesConverter("sg.sideValidator")
-public class SideValidator extends ValidatingIntConverter {
-
-	@Override protected void validate(FacesContext facesContext, UIComponent component, String value,
+@FacesValidator("sg.sideValidator")
+public class SideValidator extends ValidatingConverter {
+	
+	@Override protected void validate(FacesContext facesContext, UIComponent component, Object value,
 			UIComponent attribute) throws ValidatorException {
-		Integer num = positive(integer(value.toString()));
-		UISelectOne unitComponent = (UISelectOne) attribute;
-		String unit_$ = (String) unitComponent.getSubmittedValue();
-		UnitOfLength unit = UnitOfLength.valueOf(unit_$);
-		double area = SquareMethods.area(num, unit);
-		boolean valid = area < 1;
-		if (!valid) {
-			throw new ValidatorException(CommonKey.ERROR_TOO_LARGE);
+		final Integer num = positive(integer(requiredString(value)));
+		final UISelectOne select = (UISelectOne) attribute;
+		final UnitOfLength unit = valueOf((String) select.getSubmittedValue());
+		final double area = area(num, unit);
+		if (area >= 1) {
+			throw new ValidatorException(errMesg(ERROR_TOO_LARGE));
 		}
 	}
-
+	
 }
