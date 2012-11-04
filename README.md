@@ -1,7 +1,7 @@
 futil-square-validator
 ======================
 
-An example project that uses futil. This branch uses [statelessjsf](http://industrieit.com/blog/2011/11/stateless-jsf-high-performance-zero-per-request-memory-overhead/).
+An example project that uses futil. This branch uses [Stateless JSF](http://industrieit.com/blog/2011/11/stateless-jsf-high-performance-zero-per-request-memory-overhead/).
 
 Build and run with 
 
