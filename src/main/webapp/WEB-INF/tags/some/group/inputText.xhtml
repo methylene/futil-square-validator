@@ -11,7 +11,7 @@
 
 		<p class="input-field">
 		
-			<h:inputText id="#{id}" value="#{value}"
+			<h:inputText id="#{id}" value="#{value}" label="#{msg[label]}"
 				styleClass="#{empty requestScope['org.meth4j.futil.errors'][id] ? 'all-good' : 'something-wrong'}">
 				<f:validator validatorId="#{converterId}" />
 				<f:attribute name="org.meth4j.futil.attribute" value="#{empty attribute ? null : attribute}" />
