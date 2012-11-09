@@ -23,8 +23,6 @@ import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 
-
-
 public class SJSFPhaseListener implements PhaseListener {
 
 	private static final long serialVersionUID = 1L;
@@ -34,10 +32,9 @@ public class SJSFPhaseListener implements PhaseListener {
 	}
 
 	public void afterPhase(PhaseEvent event) {
-		if (SJSFUtil.isPoolable(FacesContext.getCurrentInstance().getViewRoot()))
-		{
-			FacesContext fc=FacesContext.getCurrentInstance();
-			SJSFStatePool.cache(SJSFURIBuilder.getURI(),fc.getViewRoot());
+		if (SJSFUtil.isPoolable(FacesContext.getCurrentInstance().getViewRoot())) {
+			FacesContext fc = FacesContext.getCurrentInstance();
+			SJSFStatePool.cache(SJSFURIBuilder.getURI(), fc.getViewRoot());
 		}
 		//System.out.println("=======================================");
 	}

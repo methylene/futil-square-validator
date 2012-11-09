@@ -40,149 +40,126 @@ import com.rits.cloning.Cloner;
 
 public class SJSFStatePool {
 
-	private static Map<String, LinkedList<UIViewRoot>> ppool=new Hashtable<String, LinkedList<UIViewRoot>>();
-	private static Map<String,String> discriminatorMap=new Hashtable<String, String>();
-	
-	private static Logger log=LoggerFactory.getLogger(SJSFStatePool.class);
+	private static Map<String, LinkedList<UIViewRoot>> ppool = new Hashtable<String, LinkedList<UIViewRoot>>();
+	private static Map<String, String> discriminatorMap = new Hashtable<String, String>();
+
+	private static Logger log = LoggerFactory.getLogger(SJSFStatePool.class);
 	private static ExecutorService exServ;
-	
+
 	static {
-		ThreadFactory tf=new ThreadFactory() {
-			
+		final ThreadFactory tf = new ThreadFactory() {
+
 			public Thread newThread(Runnable r) {
-				Thread t=new Thread(r);
+				final Thread t = new Thread(r);
 				t.setDaemon(true);
 				return t;
 			}
 		};
-		
-		BlockingQueue<Runnable> q=new  LinkedBlockingQueue<Runnable>(250);
-		exServ=new ThreadPoolExecutor(1, 3, 30l, TimeUnit.SECONDS, q,tf,new ThreadPoolExecutor.CallerRunsPolicy());
-	}
-	
-	public static synchronized UIViewRoot get(String uri)
-	{
-		String discrimValue=getDiscriminatorValue(uri, null);
-		LinkedList<UIViewRoot> items=getPoolForKey(uri, discrimValue);
 
-		UIViewRoot v=null;
-		synchronized(items)
-		{
-			if (items.isEmpty())
-			{
+		final BlockingQueue<Runnable> q = new LinkedBlockingQueue<Runnable>(250);
+		exServ = new ThreadPoolExecutor(1, 3, 30l, TimeUnit.SECONDS, q, tf, new ThreadPoolExecutor.CallerRunsPolicy());
+	}
+
+	public static synchronized UIViewRoot get(String uri) {
+		final String discrimValue = getDiscriminatorValue(uri, null);
+		final LinkedList<UIViewRoot> items = getPoolForKey(uri, discrimValue);
+
+		UIViewRoot v = null;
+		synchronized (items) {
+			if (items.isEmpty()) {
 				return null;
 			}
-			if (items.size()==1)
-			{
+			if (items.size() == 1) {
 				try {
 					//clone
-					Cloner cloner=new Cloner();
-					v=cloner.deepClone(items.getFirst());
-					log.warn("cloning..."+v.getViewId()+".....");
-				} catch (Exception e) {
-					log.error("error force cloning view on postback",e);
+					final Cloner cloner = new Cloner();
+					v = cloner.deepClone(items.getFirst());
+					log.warn("cloning..." + v.getViewId() + ".....");
+				} catch (final Exception e) {
+					log.error("error force cloning view on postback", e);
 				}
-			}
-			else
-			{
-				v= (UIViewRoot) items.removeFirst();
+			} else {
+				v = (UIViewRoot) items.removeFirst();
 			}
 		}
 		//long intime=(Long) v.getAttributes().get(SJSFStatics.INPOOL);
 		//System.out.println("delay "+(System.currentTimeMillis()-intime));
 		return v;
 	}
-	
-	public static synchronized void cache(String uri, UIViewRoot v)
-	{
-		String discrimValue=getDiscriminatorValue(uri, v);
-		LinkedList<UIViewRoot> items=getPoolForKey(uri, discrimValue);
-		SJSFCleanTask t=new SJSFCleanTask(v,items);
+
+	public static synchronized void cache(String uri, UIViewRoot v) {
+		final String discrimValue = getDiscriminatorValue(uri, v);
+		log.info("discrimValue=`{}'", discrimValue);
+		final LinkedList<UIViewRoot> items = getPoolForKey(uri, discrimValue);
+		final SJSFCleanTask t = new SJSFCleanTask(v, items);
 		exServ.submit(t);
 	}
 
-	public static synchronized void clearPool()
-	{
-		ppool=new HashMap<String, LinkedList<UIViewRoot>>();
+	public static synchronized void clearPool() {
+		ppool = new HashMap<String, LinkedList<UIViewRoot>>();
 	}
-	
-	private static LinkedList<UIViewRoot> getPoolForKey(String uri, String discrim)
-	{
-		String k=constructCompositeKey(uri, discrim);
-		LinkedList<UIViewRoot> items=(LinkedList<UIViewRoot>) ppool.get(k);
-		if (items==null)
-		{
-			items=new LinkedList<UIViewRoot>();
+
+	private static LinkedList<UIViewRoot> getPoolForKey(String uri, String discrim) {
+		final String k = constructCompositeKey(uri, discrim);
+		LinkedList<UIViewRoot> items = (LinkedList<UIViewRoot>) ppool.get(k);
+		if (items == null) {
+			items = new LinkedList<UIViewRoot>();
 			ppool.put(k, items);
 		}
 		return items;
 	}
-	
-	public static int getPoolCount(String uri)
-	{
-		String discrimValue=getDiscriminatorValue(uri, null);
-		LinkedList<UIViewRoot> items=getPoolForKey(uri, discrimValue);
+
+	public static int getPoolCount(String uri) {
+		final String discrimValue = getDiscriminatorValue(uri, null);
+		final LinkedList<UIViewRoot> items = getPoolForKey(uri, discrimValue);
 		return items.size();
 	}
-	
-	private static String getDiscriminatorValue(String uri, UIViewRoot v)
-	{
-		FacesContext fc=FacesContext.getCurrentInstance();
-		String cached=(String) fc.getAttributes().get(SJSFStatics.DISCRIMINATOR_ATTRIB_NAME);
-		if (cached!=null)
-		{
+
+	private static String getDiscriminatorValue(String uri, UIViewRoot v) {
+		final FacesContext fc = FacesContext.getCurrentInstance();
+		final String cached = (String) fc.getAttributes().get(SJSFStatics.DISCRIMINATOR_ATTRIB_NAME);
+		if (cached != null) {
 			return cached;
 		}
 		//get the disciminator
-		String discrim=discriminatorMap.get(uri);
-		String discrimValue="";
-		if (discrim==null)
-		{
+		String discrim = discriminatorMap.get(uri);
+		String discrimValue = "";
+		if (discrim == null) {
 			//System.out.println("initialising discrim for "+uri);
-			if (v==null)
-			{
+			if (v == null) {
 				return "";
 			}
 			//not set yet
-			discrim=(String) v.getAttributes().get(SJSFStatics.DISCRIMINATOR_ATTRIB_NAME);
-			if (discrim==null)
-			{
+			discrim = (String) v.getAttributes().get(SJSFStatics.DISCRIMINATOR_ATTRIB_NAME);
+			if (discrim == null) {
 				return "";
+			} else {
+				discrim = "#{" + discrim + "}";
 			}
-			else
-			{
-				discrim="#{"+discrim+"}";
-			}
-			discriminatorMap.put(uri, discrim );
+			discriminatorMap.put(uri, discrim);
 		}
-		if (discrim.length()!=0)
-		{
-			ValueExpression ve=ExpressionFactory.newInstance().createValueExpression(fc.getELContext(),discrim , String.class);
-			discrimValue=(String)ve.getValue(fc.getELContext());
+		if (discrim.length() != 0) {
+			final ValueExpression ve = ExpressionFactory.newInstance().createValueExpression(fc.getELContext(),
+					discrim, String.class);
+			discrimValue = (String) ve.getValue(fc.getELContext());
 		}
 		fc.getAttributes().put(SJSFStatics.DISCRIMINATOR_ATTRIB_NAME, discrimValue);
 		return discrimValue;
 	}
-	
-	private static String constructCompositeKey(String uri, String discriminator)
-	{
-		if (discriminator==null || discriminator.length()==0)
-		{
+
+	private static String constructCompositeKey(String uri, String discriminator) {
+		if (discriminator == null || discriminator.length() == 0) {
 			return uri;
-		}
-		else
-		{
-			StringBuilder sb=new StringBuilder();
+		} else {
+			final StringBuilder sb = new StringBuilder();
 			sb.append(uri).append("-").append(discriminator);
 			return sb.toString();
 		}
 	}
-	
-	public static Map<String, Integer> getCacheStats()
-	{
-		HashMap<String, Integer> ret=new HashMap<String, Integer>();
-		for (String k : ppool.keySet())
-		{
+
+	public static Map<String, Integer> getCacheStats() {
+		final HashMap<String, Integer> ret = new HashMap<String, Integer>();
+		for (final String k : ppool.keySet()) {
 			ret.put(k, ppool.get(k).size());
 		}
 		return ret;

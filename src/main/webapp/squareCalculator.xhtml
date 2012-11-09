@@ -6,6 +6,10 @@
 	xmlns:sg="http://some-group.com/tags"
 	template="/WEB-INF/template/super.xhtml">
 	
+	<f:metadata>
+   <f:event type="preRenderView" listener="#{logBean['action']}" />	
+</f:metadata>
+	
 	<ui:define name="style">
 	<style type="text/css">
 	

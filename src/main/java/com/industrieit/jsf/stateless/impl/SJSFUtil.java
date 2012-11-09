@@ -22,28 +22,23 @@ import javax.faces.component.UIViewRoot;
 
 public class SJSFUtil {
 
-	public static boolean isPoolable(UIViewRoot vr)
-	{
-		boolean ret=false;
-		if (vr!=null)
-		{
-			ret=vr.getAttributes().containsKey(SJSFStatics.POOLABLE);
+	public static boolean isPoolable(UIViewRoot vr) {
+		boolean ret = false;
+		if (vr != null) {
+			ret = vr.getAttributes().containsKey(SJSFStatics.POOLABLE);
 		}
 		return ret;
 	}
-	
-	public static UIComponent getSJSFComponent(UIViewRoot vr)
-	{
-		for (UIComponent u : vr.getChildren())
-	   {
-		   if (u.getId().equals(SJSFStatics.SJSF_MARKER))
-		   {
-			   return u;
-		   }
-	   }
+
+	public static UIComponent getSJSFComponent(UIViewRoot vr) {
+		for (UIComponent u : vr.getChildren()) {
+			if (u.getId().equals(SJSFStatics.SJSF_MARKER)) {
+				return u;
+			}
+		}
 		return null;
 	}
-	
+
 /*	public static String getDiscriminatorr(FacesContext fc)
 	{
 		//System.out.println("discriminator is "+disc);

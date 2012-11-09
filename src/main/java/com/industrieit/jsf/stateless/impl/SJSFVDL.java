@@ -30,60 +30,47 @@ import com.sun.faces.application.view.FaceletViewHandlingStrategy;
 
 public class SJSFVDL extends FaceletViewHandlingStrategy {
 
-		Logger log = LoggerFactory.getLogger(this.getClass());
-	
-	   @Override
-	    public void buildView(FacesContext ctx, UIViewRoot view)
-	    throws IOException {
+	Logger log = LoggerFactory.getLogger(this.getClass());
 
-		   if (!view.getAttributes().containsKey(SJSFStatics.BUILD_MARKER_KEY))
-		   {
-			   //System.out.println("build view");
-			   super.buildView(ctx, view);
-			   if (view.getChildCount()==0)
-			   {
-				   log.error("BUILD ERROR!!!!! - viewroot has no children");
-			   }
-			   //is it poolable?
-			   boolean poolable=false;
-			   String discriminator=null;
-			   for (UIComponent u : view.getChildren())
-			   {
-				   if (u.getId().equals(SJSFStatics.SJSF_MARKER))
-				   {
-					   if (u.getAttributes().containsKey(SJSFStatics.STATELESS))
-					   {
-						   String str=""+u.getAttributes().get(SJSFStatics.STATELESS);
-						   if (str!=null && str.trim().compareToIgnoreCase("true")==0)
-						   {
-							   poolable = true;
-						   }
-						   str=""+u.getAttributes().get(SJSFStatics.DISCRIMINATOR);
-						   if (str!=null)
-						   {
-							   discriminator=str;
-						   }
-					   }
-				   }
-			   }
-			   String uri=SJSFURIBuilder.getURI();
-			   if (poolable)
-			   {
-				   //add a poolable marker
-				   log.info("STATELESS JSF URI "+uri+" IS MARKED STATIC AND POOLABLE");
-				   view.getAttributes().put(SJSFStatics.POOLABLE, Boolean.TRUE);
-				   view.getAttributes().put(SJSFStatics.BUILD_MARKER_KEY, Boolean.TRUE);
-				   if (discriminator!=null)
-				   {
-					   view.getAttributes().put(SJSFStatics.DISCRIMINATOR_ATTRIB_NAME,discriminator);
-				   }
-			   }
-			   else
-			   {
-				   //System.out.println("!!! WARNING - URI "+uri+" IS NOT MARKED STATIC AND POOLABLE");			   
-			   }
-			   //mark as built
-		   }
-	    }
+	@Override public void buildView(FacesContext ctx, UIViewRoot view) throws IOException {
+
+		if (!view.getAttributes().containsKey(SJSFStatics.BUILD_MARKER_KEY)) {
+			//System.out.println("build view");
+			super.buildView(ctx, view);
+			if (view.getChildCount() == 0) {
+				log.error("BUILD ERROR!!!!! - viewroot has no children");
+			}
+			//is it poolable?
+			boolean poolable = false;
+			String discriminator = null;
+			for (UIComponent u : view.getChildren()) {
+				if (u.getId().equals(SJSFStatics.SJSF_MARKER)) {
+					if (u.getAttributes().containsKey(SJSFStatics.STATELESS)) {
+						String str = "" + u.getAttributes().get(SJSFStatics.STATELESS);
+						if (str != null && str.trim().compareToIgnoreCase("true") == 0) {
+							poolable = true;
+						}
+						str = "" + u.getAttributes().get(SJSFStatics.DISCRIMINATOR);
+						if (str != null) {
+							discriminator = str;
+						}
+					}
+				}
+			}
+			String uri = SJSFURIBuilder.getURI();
+			if (poolable) {
+				//add a poolable marker
+				log.info("STATELESS JSF URI " + uri + " IS MARKED STATIC AND POOLABLE");
+				view.getAttributes().put(SJSFStatics.POOLABLE, Boolean.TRUE);
+				view.getAttributes().put(SJSFStatics.BUILD_MARKER_KEY, Boolean.TRUE);
+				if (discriminator != null) {
+					view.getAttributes().put(SJSFStatics.DISCRIMINATOR_ATTRIB_NAME, discriminator);
+				}
+			} else {
+				//System.out.println("!!! WARNING - URI "+uri+" IS NOT MARKED STATIC AND POOLABLE");			   
+			}
+			//mark as built
+		}
+	}
 
 }

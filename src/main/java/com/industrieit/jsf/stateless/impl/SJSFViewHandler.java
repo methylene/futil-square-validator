@@ -26,66 +26,49 @@ import javax.faces.context.FacesContext;
 import com.sun.faces.application.view.MultiViewHandler;
 
 public class SJSFViewHandler extends MultiViewHandler {
-	
-	
-	
-	@Override
-	public UIViewRoot createView(FacesContext context, String viewId) {
-		String uri=getURI();
-		UIViewRoot vr=null;
-		synchronized (this)
-		{
+
+	@Override public UIViewRoot createView(FacesContext context, String viewId) {
+		String uri = getURI();
+		UIViewRoot vr = null;
+		synchronized (this) {
 			//System.out.println("vh create view");
-			if (SJSFStatePool.getPoolCount(uri)>SJSFStatics.POST_BUFFER)
-			{
-				vr=SJSFStatePool.get(uri);
+			if (SJSFStatePool.getPoolCount(uri) > SJSFStatics.POST_BUFFER) {
+				vr = SJSFStatePool.get(uri);
 			}
-			if (vr!=null )
-			{
+			if (vr != null) {
 				context.setViewRoot(vr);
-			}
-			else
-			{			
-				vr= super.createView(context, viewId);
+			} else {
+				vr = super.createView(context, viewId);
 			}
 		}
 		return vr;
 	}
 
-	@Override
-	public void initView(FacesContext context) throws FacesException {
+	@Override public void initView(FacesContext context) throws FacesException {
 		//System.out.println("vh init view");
-		String uri=getURI();
-		UIViewRoot vr=null;
-		if (context.isPostback() || SJSFStatePool.getPoolCount(uri)>SJSFStatics.POST_BUFFER)
-		{
-			vr=SJSFStatePool.get(uri);
+		String uri = getURI();
+		UIViewRoot vr = null;
+		if (context.isPostback() || SJSFStatePool.getPoolCount(uri) > SJSFStatics.POST_BUFFER) {
+			vr = SJSFStatePool.get(uri);
 		}
-		if (vr!=null)
-		{
+		if (vr != null) {
 			context.setViewRoot(vr);
 		}
 		super.initView(context);
 	}
-	
-	@Override
-	public void writeState(FacesContext context) throws IOException {
-		
-		if (SJSFUtil.isPoolable(context.getViewRoot()))
-		{
+
+	@Override public void writeState(FacesContext context) throws IOException {
+
+		if (SJSFUtil.isPoolable(context.getViewRoot())) {
 			super.writeState(context);
-		}
-		else
-		{
+		} else {
 			//System.out.println("vh write state");
 			super.writeState(context);
 		}
 	}
 
-	
-	private String getURI()
-	{
+	private String getURI() {
 		return SJSFURIBuilder.getURI();
 	}
-	
+
 }

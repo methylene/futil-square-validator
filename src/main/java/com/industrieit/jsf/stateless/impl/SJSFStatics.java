@@ -19,17 +19,17 @@ package com.industrieit.jsf.stateless.impl;
 
 public class SJSFStatics {
 
-	public final static String BUILD_MARKER_KEY="SJSF_BUILT";
-	public final static String SJSF_MARKER="SJSF";
-	public final static String POOLABLE="SJSF_POOLABLE";
-	public final static String STATELESS_VIEW_ID="STATELESS_JSF";
-	public final static String STATELESS="stateless";
-	public static final String DISCRIMINATOR_ATTRIB_NAME="SJSF_DISCRIMINATOR";
-	public static final String DISCRIMINATOR="discriminator";
-	public static final String INPOOL="SJSF_INPOOL";
+	public final static String BUILD_MARKER_KEY = "SJSF_BUILT";
+	public final static String SJSF_MARKER = "SJSF";
+	public final static String POOLABLE = "SJSF_POOLABLE";
+	public final static String STATELESS_VIEW_ID = "STATELESS_JSF";
+	public final static String STATELESS = "stateless";
+	public static final String DISCRIMINATOR_ATTRIB_NAME = "SJSF_DISCRIMINATOR";
+	public static final String DISCRIMINATOR = "discriminator";
+	public static final String INPOOL = "SJSF_INPOOL";
 	//you cannot create a view on a postback - you must get it from the buffer
-	public static int POST_BUFFER=3;
+	public static int POST_BUFFER = 3;
 	//if extra views are created anything under non_contract_buffer is not cleaned up
 	//ensure NON_CONTRACT_BUFFER>POST_BUFFER
-	public static int NON_CONTRACT_BUFFER=5;
+	public static int NON_CONTRACT_BUFFER = 5;
 }

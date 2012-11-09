@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 
-
 package com.industrieit.jsf.stateless.impl;
 
 import javax.faces.view.ViewDeclarationLanguage;
