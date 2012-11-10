@@ -1,7 +1,7 @@
 futil-square-validator
 ======================
 
-This branch demonstrates, and proposes a solution for, a problem with [http://industrieit.com/blog/2011/11/stateless-jsf-high-performance-zero-per-request-memory-overhead/](Stateless JSF).
+This branch demonstrates, and proposes a solution for, a problem with [Stateless JSF](http://industrieit.com/blog/2011/11/stateless-jsf-high-performance-zero-per-request-memory-overhead/).
 
 After a few GET requests, the value of an f:viewParam can not be accessed from the view anymore.
 
