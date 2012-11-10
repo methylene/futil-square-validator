@@ -38,7 +38,7 @@
 	</session-config>
 
 	<welcome-file-list>
-		<welcome-file>squareCalculator.xhtml</welcome-file>
+		<welcome-file>lostViewParam.xhtml</welcome-file>
 	</welcome-file-list>
 
 </web-app>

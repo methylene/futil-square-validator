@@ -17,6 +17,8 @@
 
 package com.industrieit.jsf.stateless.impl;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import java.io.IOException;
 
 import javax.faces.FacesException;
@@ -28,12 +30,15 @@ import com.sun.faces.application.view.MultiViewHandler;
 public class SJSFViewHandler extends MultiViewHandler {
 
 	@Override public UIViewRoot createView(FacesContext context, String viewId) {
-		String uri = getURI();
+		final String uri = getURI();
 		UIViewRoot vr = null;
 		synchronized (this) {
 			//System.out.println("vh create view");
-			if (SJSFStatePool.getPoolCount(uri) > SJSFStatics.POST_BUFFER) {
+			final int poolCount = SJSFStatePool.getPoolCount(uri);
+			if (poolCount > SJSFStatics.POST_BUFFER) {
 				vr = SJSFStatePool.get(uri);
+			} else {
+				getLogger(getClass()).info("{}: poolCount < POST_BUFFER; poolCount={}", viewId, poolCount);
 			}
 			if (vr != null) {
 				context.setViewRoot(vr);
@@ -46,10 +51,15 @@ public class SJSFViewHandler extends MultiViewHandler {
 
 	@Override public void initView(FacesContext context) throws FacesException {
 		//System.out.println("vh init view");
-		String uri = getURI();
+		final String uri = getURI();
 		UIViewRoot vr = null;
 		if (context.isPostback() || SJSFStatePool.getPoolCount(uri) > SJSFStatics.POST_BUFFER) {
 			vr = SJSFStatePool.get(uri);
+			if (vr == null) {
+				getLogger(getClass()).info("{}: SJSF cache miss", SJSFURIBuilder.getURI());
+			} else {
+				getLogger(getClass()).info("{}: SJSF cache hit", SJSFURIBuilder.getURI());
+			}
 		}
 		if (vr != null) {
 			context.setViewRoot(vr);

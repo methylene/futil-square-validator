@@ -6,9 +6,10 @@
 	xmlns:sg="http://some-group.com/tags"
 	template="/WEB-INF/template/super.xhtml">
 	
+<ui:remove><!-- 
 	<f:metadata>
    <f:event type="preRenderView" listener="#{logBean['action']}" />	
-</f:metadata>
+</f:metadata> --></ui:remove>
 	
 	<ui:define name="style">
 	<style type="text/css">
@@ -48,6 +49,10 @@
 		
 		</h:form>
 		
+		</div>
+		
+		<div class="span-24" style="margin-top:10px">
+			or take a look at <h:link outcome="/lostViewParam" value="the problem with Stateless JSF and f:viewParam"><f:param name="barf" value="merf" /></h:link>
 		</div>
 	
 	</ui:define>

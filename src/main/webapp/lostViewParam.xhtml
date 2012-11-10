@@ -1,0 +1,41 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:sg="http://some-group.com/tags"
+	template="/WEB-INF/template/super.xhtml">
+	
+	<f:metadata>
+       <f:viewParam name="barf"/>
+    </f:metadata>
+	
+	<ui:define name="main">
+	
+		<div class="span-24">
+		
+		<h1 style="margin-top:12px">barf = #{barf}</h1>
+		
+		<p><h:link outcome="/lostViewParam" title="Set barf = barf" value="Set barf = barf"><f:param name="barf" value="barf"/></h:link></p>
+		
+		</div>
+		
+		<div class="span-24" style="margin-top:10px">
+		<p>This page demonstrates a problem with <h:outputLink value="http://industrieit.com/blog/2011/11/stateless-jsf-high-performance-zero-per-request-memory-overhead/">Stateless JSF</h:outputLink>.
+		Click on the link above a few times, and the value of the request parameter "barf" will not appear anymore in the headline.</p>
+		<p>The cause appears to be that, in the case of a SJSF cache hit, all lifecycle phases after RestoreView are skipped.</p> 
+		<p>Commenting out a line in RestoreViewPhase.java "fixes it" for now. I'm not quite sure what other effects this might have. 
+		I don't know why the line was there in the first place.</p>
+		<p>Uncomment the following line in faces-config.xml, to test the fix:</p>
+		<pre><code>
+		&lt;!-- 		&lt;lifecycle-factory&gt;org.meth4j.jsf.Meth4jLifecycleFactory&lt;/lifecycle-factory&gt; --&gt;
+		</code></pre> 
+		</div>
+		
+		<div class="span-24" style="margin-top:10px">
+			or <h:link outcome="/squareCalculator" value="have a look at the h:form" />. Everything there seems to work just fine, with or without the fix. 
+		</div>
+	
+	</ui:define>
+	
+</ui:composition>

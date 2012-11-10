@@ -4,7 +4,7 @@
 
 	<groupId>some.group</groupId>
 	<artifactId>futil-square-validator</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.3</version>
 
 	<packaging>war</packaging>
 
@@ -20,31 +20,50 @@
 			<version>13.0</version>
 		</dependency>
 
-    <dependency>
-        <groupId>uk.com.robust-it</groupId>
-        <artifactId>cloning</artifactId>
-        <version>1.7.4</version>
-    </dependency>
+		<dependency>
+			<groupId>uk.com.robust-it</groupId>
+			<artifactId>cloning</artifactId>
+			<version>1.7.4</version>
+		</dependency>
 
-      <dependency>
-        <groupId>org.glassfish.web</groupId>
-        <artifactId>el-impl</artifactId>
-        <version>2.2.1-b04</version>
-        <scope>provided</scope>
-      </dependency>
+		<dependency>
+			<groupId>org.glassfish.web</groupId>
+			<artifactId>el-impl</artifactId>
+			<version>2.2</version>
+			<scope>provided</scope>
+		</dependency>
 
-      <dependency>
-        <groupId>javax.el</groupId>
-        <artifactId>el-api</artifactId>
-        <version>2.2.1-b04</version>
-        <scope>provided</scope>
-      </dependency>
+		<dependency>
+			<groupId>javax.el</groupId>
+			<artifactId>el-api</artifactId>
+			<version>2.2</version>
+			<scope>provided</scope>
+		</dependency>
+
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.sun.faces</groupId> -->
+<!-- 			<artifactId>jsf-api</artifactId> -->
+<!-- 			<version>2.1.13</version> -->
+<!-- 		</dependency> -->
+
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.sun.faces</groupId> -->
+<!-- 			<artifactId>jsf-impl</artifactId> -->
+<!-- 			<version>2.1.13</version> -->
+<!-- 		</dependency> -->
 
 		<dependency>
 			<groupId>org.glassfish</groupId>
 			<artifactId>javax.faces</artifactId>
 			<version>2.2.0-m05</version>
 		</dependency>
+
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.glassfish</groupId> -->
+<!-- 			<artifactId>javax.faces.modified</artifactId> -->
+<!-- 			<version>2.2.0-m06-SNAPSHOT</version> -->
+<!-- 		</dependency> -->
+
 
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -65,12 +84,12 @@
 			<version>1.6.6</version>
 			<scope>runtime</scope>
 		</dependency>
-		
-		<dependency>
-			<groupId>org.meth4j.futil</groupId>
-			<artifactId>futil</artifactId>
-			<version>0.2.1</version>
-		</dependency>
+
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.meth4j.futil</groupId> -->
+<!-- 			<artifactId>futil</artifactId> -->
+<!-- 			<version>0.3.2</version> -->
+<!-- 		</dependency> -->
 
 	</dependencies>
 

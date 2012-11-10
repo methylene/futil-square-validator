@@ -17,6 +17,8 @@
 
 package com.industrieit.jsf.stateless.impl;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import java.io.IOException;
 
 import javax.faces.component.UIViewRoot;
@@ -55,7 +57,7 @@ public class SJSFStateManager extends com.sun.faces.application.StateManagerImpl
 	@Override public void writeState(FacesContext context, Object state) throws IOException {
 
 		if (SJSFUtil.isPoolable(context.getViewRoot())) {
-			ResponseWriter writer = context.getResponseWriter();
+			final ResponseWriter writer = context.getResponseWriter();
 
 			writer.write("<input type=\"hidden\" name=\"javax.faces.ViewState\" id=\"javax.faces.ViewState\" value=\"");
 			writer.write(SJSFStatics.STATELESS_VIEW_ID);
@@ -82,9 +84,15 @@ public class SJSFStateManager extends com.sun.faces.application.StateManagerImpl
 	@Override public UIViewRoot restoreView(FacesContext context, String viewId, String renderKitId) {
 		UIViewRoot vr = null;
 		if (SJSFUtil.isPoolable(context.getViewRoot())) {
-			String uri = getURI();
+			final String uri = getURI();
 			vr = SJSFStatePool.get(uri);
+			if (vr == null) {
+				getLogger(getClass()).info("{}: miss", viewId);
+			} else {
+				getLogger(getClass()).info("{}: hit", viewId);
+			}
 		} else {
+			getLogger(getClass()).info("{}: not poolable", viewId);
 			//System.out.println("restore view");
 			vr = super.restoreView(context, viewId, renderKitId);
 		}

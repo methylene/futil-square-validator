@@ -18,10 +18,10 @@
 package com.industrieit.jsf.stateless.impl;
 
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
@@ -40,24 +40,22 @@ import com.rits.cloning.Cloner;
 
 public class SJSFStatePool {
 
-	private static Map<String, LinkedList<UIViewRoot>> ppool = new Hashtable<String, LinkedList<UIViewRoot>>();
-	private static Map<String, String> discriminatorMap = new Hashtable<String, String>();
+	private static final Map<String, LinkedList<UIViewRoot>> ppool = new ConcurrentHashMap<String, LinkedList<UIViewRoot>>();
+	private static final Map<String, String> discriminatorMap = new ConcurrentHashMap<String, String>();
 
-	private static Logger log = LoggerFactory.getLogger(SJSFStatePool.class);
-	private static ExecutorService exServ;
+	private static final Logger log = LoggerFactory.getLogger(SJSFStatePool.class);
+	private static final ExecutorService exServ = createExServ();
 
-	static {
+	private static ExecutorService createExServ(){
 		final ThreadFactory tf = new ThreadFactory() {
-
 			public Thread newThread(Runnable r) {
 				final Thread t = new Thread(r);
 				t.setDaemon(true);
 				return t;
 			}
 		};
-
 		final BlockingQueue<Runnable> q = new LinkedBlockingQueue<Runnable>(250);
-		exServ = new ThreadPoolExecutor(1, 3, 30l, TimeUnit.SECONDS, q, tf, new ThreadPoolExecutor.CallerRunsPolicy());
+		return new ThreadPoolExecutor(1, 3, 30l, TimeUnit.SECONDS, q, tf, new ThreadPoolExecutor.CallerRunsPolicy());
 	}
 
 	public static synchronized UIViewRoot get(String uri) {
@@ -89,14 +87,13 @@ public class SJSFStatePool {
 
 	public static synchronized void cache(String uri, UIViewRoot v) {
 		final String discrimValue = getDiscriminatorValue(uri, v);
-		log.info("discrimValue=`{}'", discrimValue);
 		final LinkedList<UIViewRoot> items = getPoolForKey(uri, discrimValue);
 		final SJSFCleanTask t = new SJSFCleanTask(v, items);
 		exServ.submit(t);
 	}
 
 	public static synchronized void clearPool() {
-		ppool = new HashMap<String, LinkedList<UIViewRoot>>();
+		ppool.clear();
 	}
 
 	private static LinkedList<UIViewRoot> getPoolForKey(String uri, String discrim) {

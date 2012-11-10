@@ -43,7 +43,7 @@ public class SJSFVDL extends FaceletViewHandlingStrategy {
 			//is it poolable?
 			boolean poolable = false;
 			String discriminator = null;
-			for (UIComponent u : view.getChildren()) {
+			for (final UIComponent u : view.getChildren()) {
 				if (u.getId().equals(SJSFStatics.SJSF_MARKER)) {
 					if (u.getAttributes().containsKey(SJSFStatics.STATELESS)) {
 						String str = "" + u.getAttributes().get(SJSFStatics.STATELESS);
@@ -57,10 +57,10 @@ public class SJSFVDL extends FaceletViewHandlingStrategy {
 					}
 				}
 			}
-			String uri = SJSFURIBuilder.getURI();
+			final String uri = SJSFURIBuilder.getURI();
 			if (poolable) {
 				//add a poolable marker
-				log.info("STATELESS JSF URI " + uri + " IS MARKED STATIC AND POOLABLE");
+//				log.info("STATELESS JSF URI " + uri + " IS MARKED STATIC AND POOLABLE");
 				view.getAttributes().put(SJSFStatics.POOLABLE, Boolean.TRUE);
 				view.getAttributes().put(SJSFStatics.BUILD_MARKER_KEY, Boolean.TRUE);
 				if (discriminator != null) {

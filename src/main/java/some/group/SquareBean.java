@@ -1,9 +1,8 @@
 package some.group;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.meth4j.futil.FlashMesg.flashInfo;
-import static org.meth4j.futil.Messages.flashMesg;
-import static some.group.SquareMethods.area;
+import static some.group.FlashMesg.flashInfo;
+import static some.group.Messages.flashMesg;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -18,7 +17,7 @@ public class SquareBean {
 	public String action() {
 		checkNotNull(side);
 		checkNotNull(unit);
-		final double area = area(side, unit);
+		final double area = SquareMethods.area(side, unit);
 		flashMesg(flashInfo(Key.INFO_SUCCESS));
 		return "/outcome?faces-redirect=true&amp;area="+area;
 	}
