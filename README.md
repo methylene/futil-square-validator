@@ -11,7 +11,7 @@ Commenting out a line in RestoreViewPhase.java "fixes it" for now. I'm not quite
 
 Uncomment the following line in faces-config.xml, to test the fix:
 
-	&lt;!-- 		&lt;lifecycle-factory&gt;org.meth4j.jsf.Meth4jLifecycleFactory&lt;/lifecycle-factory&gt; --&gt;
+	<!-- 		<lifecycle-factory>org.meth4j.jsf.Meth4jLifecycleFactory</lifecycle-factory> -->
 
 Build and run with 
 
