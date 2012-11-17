@@ -3,18 +3,7 @@
 	xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
 
-	<application>
-		<state-manager>com.industrieit.jsf.stateless.impl.SJSFStateManager</state-manager>
-		<view-handler>com.industrieit.jsf.stateless.impl.SJSFViewHandler</view-handler>
-	</application>
-
-	<factory>
-		<view-declaration-language-factory>com.industrieit.jsf.stateless.impl.SJSFVDLFactory</view-declaration-language-factory>
-<!-- 		<lifecycle-factory>org.meth4j.jsf.Meth4jLifecycleFactory</lifecycle-factory> -->
-	</factory>
-
 	<lifecycle>
-		<phase-listener>com.industrieit.jsf.stateless.impl.SJSFPhaseListener</phase-listener>
 		<phase-listener>some.group.MessageListener</phase-listener>
 		<phase-listener>org.meth4j.jsf.PhaseTrackingListener</phase-listener>
 	</lifecycle>

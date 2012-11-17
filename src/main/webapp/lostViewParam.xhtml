@@ -21,19 +21,17 @@
 		</div>
 		
 		<div class="span-24" style="margin-top:10px">
-		<p>This page demonstrates a problem with <h:outputLink value="http://industrieit.com/blog/2011/11/stateless-jsf-high-performance-zero-per-request-memory-overhead/">Stateless JSF</h:outputLink>.
-		Click on the link above a few times, and the value of the request parameter "barf" will not appear anymore in the headline.</p>
-		<p>The cause appears to be that, in the case of a SJSF cache hit, all lifecycle phases after RestoreView are skipped.</p> 
-		<p>Commenting out a line in RestoreViewPhase.java "fixes it" for now. I'm not quite sure what other effects this might have. 
-		I don't know why the line was there in the first place.</p>
-		<p>Uncomment the following line in faces-config.xml, to test the fix:</p>
+		<p>Same page as in the &quot;jsfun&quot; branch, but without SJSF. It is intended to show that, when a view contains the f:metadata tag, all 6 lifecycle phases run on an initial request.</p>
+		<p>Without the following snippet, only phases RESTORE_VIEW (1) and RENDER_RESPONSE (6) would run:</p>
 		<pre><code>
-		&lt;!-- 		&lt;lifecycle-factory&gt;org.meth4j.jsf.Meth4jLifecycleFactory&lt;/lifecycle-factory&gt; --&gt;
+			&lt;f:metadata&gt;
+				&lt;f:viewParam name=&quot;barf&quot;/&gt;
+			&lt;/f:metadata&gt;
 		</code></pre> 
 		</div>
 		
 		<div class="span-24" style="margin-top:10px">
-			or <h:link outcome="/squareCalculator" value="have a look at the h:form" />. Everything there seems to work just fine, with or without the fix. 
+			or <h:link outcome="/squareCalculator" value="have a look at the h:form" /> 
 		</div>
 	
 	</ui:define>
