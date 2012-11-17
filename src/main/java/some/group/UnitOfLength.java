@@ -18,20 +18,18 @@ public enum UnitOfLength implements IKey {
 		this._key = key;
 	}
 
-	@Override
-	public String getKey() {
+	@Override public String getKey() {
 		return name();
 	}
 
-	@Override
-	public String getLabel() {
+	@Override public String getLabel() {
 		return _key.getLabel();
 	}
 
 	public double getMeters() {
 		return meters;
 	}
-	
+
 	public String toString() {
 		return String.format("[%s|%f]", name(), meters);
 	}

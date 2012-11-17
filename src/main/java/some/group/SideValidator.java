@@ -12,22 +12,21 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectOne;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.FacesValidator;
+import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
-import org.meth4j.futil.ValidatingConverter;
-
 @FacesValidator("sg.sideValidator")
-public class SideValidator extends ValidatingConverter {
+public class SideValidator implements Validator {
 	
-	@Override protected void validate(FacesContext facesContext, UIComponent component, Object value,
-			UIComponent attribute) throws ValidatorException {
+	@Override public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
 		final Integer num = positive(integer(requiredString(value)));
-		final UISelectOne select = (UISelectOne) attribute;
+		final UISelectOne select = (UISelectOne) component.getAttributes().get("attr");
 		final UnitOfLength unit = valueOf((String) select.getSubmittedValue());
 		final double area = area(num, unit);
 		if (area >= 1) {
-			throw new ValidatorException(errMesg(ERROR_TOO_LARGE));
+			throw new ValidatorException(errMesg(ERROR_TOO_LARGE, num));
 		}
 	}
+	
 	
 }

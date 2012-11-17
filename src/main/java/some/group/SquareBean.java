@@ -19,7 +19,7 @@ public class SquareBean {
 		checkNotNull(side);
 		checkNotNull(unit);
 		final double area = area(side, unit);
-		flashMesg(flashInfo(Key.INFO_SUCCESS));
+		flashMesg(flashInfo(Key.INFO_SUCCESS, side, unit.getLabel()));
 		return "/outcome?faces-redirect=true&amp;area="+area;
 	}
 
