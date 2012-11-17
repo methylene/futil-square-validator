@@ -20,3 +20,5 @@ Build and run with
 [Lincoln Baxter](https://github.com/lincolnthree) has created a related [jira issue](http://java.net/jira/browse/JAVASERVERFACES_SPEC_PUBLIC-1055) on java.net.
 
 I could not find a maven artifact of Stateless JSF, so I just copied its java source files to src/main/java.
+
+The [wstate branch](https://github.com/methylene/futil-square-validator/tree/wstate) is very similar but does not use SJSF (for comparison).
