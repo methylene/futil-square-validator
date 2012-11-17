@@ -55,7 +55,8 @@ ul li {margin:0;padding:0}
 <div class="container">
 	<div class="span-24"  style="margin:20px 0">
 	<h:messages globalOnly="true" errorClass="error" infoClass="info" />
-	<ul>
+	<h4 style="margin-bottom: 4px">Phases run:</h4>
+	<ul class="info">
 	<ui:repeat var="phase" value="#{facesContext['attributes']['org.meth4j.jsf.PHASE_TRACKER']['phaseIds']}">
 	<li>#{phase}</li>
 	</ui:repeat>
