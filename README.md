@@ -1,5 +1,5 @@
-futil-square-validator
-======================
+futil-square-validator: jsfun
+=============================
 
 This branch demonstrates, and proposes a solution for, a problem with [Stateless JSF](http://industrieit.com/blog/2011/11/stateless-jsf-high-performance-zero-per-request-memory-overhead/).
 
