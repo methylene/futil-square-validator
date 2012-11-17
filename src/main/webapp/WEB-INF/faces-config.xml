@@ -19,6 +19,7 @@
 
 	<lifecycle>
 		<phase-listener>org.meth4j.futil.MessageFilter</phase-listener>
+		<phase-listener>org.meth4j.jsf.PhaseTrackingListener</phase-listener>
 	</lifecycle>
 
 	<converter>
