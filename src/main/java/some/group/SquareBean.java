@@ -3,6 +3,7 @@ package some.group;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static some.group.FlashMesg.flashInfo;
 import static some.group.Messages.flashMesg;
+import static some.group.SquareMethods.area;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -13,13 +14,13 @@ public class SquareBean {
 
 	private Integer side;
 	private UnitOfLength unit;
-	
+
 	public String action() {
 		checkNotNull(side);
 		checkNotNull(unit);
-		final double area = SquareMethods.area(side, unit);
-		flashMesg(flashInfo(Key.INFO_SUCCESS));
-		return "/outcome?faces-redirect=true&amp;area="+area;
+		final double area = area(side, unit);
+		flashMesg(flashInfo(Key.INFO_SUCCESS, side, unit.getLabel()));
+		return "/outcome?faces-redirect=true&amp;area=" + area;
 	}
 
 	public UnitOfLength getUnit() {
