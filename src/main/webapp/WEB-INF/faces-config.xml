@@ -3,9 +3,27 @@
 	xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
 
+	<application>
+
+		<locale-config>
+			<default-locale>en</default-locale>
+			<supported-locale>en</supported-locale>
+		</locale-config>
+
+		<message-bundle>org.somegroup.mesg</message-bundle>
+
+		<resource-bundle>
+			<base-name>org.somegroup.mesg</base-name>
+			<var>msg</var>
+		</resource-bundle>
+
+	</application>
+
 	<lifecycle>
+
 		<phase-listener>some.group.MessageListener</phase-listener>
 		<phase-listener>org.meth4j.jsf.PhaseTrackingListener</phase-listener>
+
 	</lifecycle>
 
 </faces-config>
