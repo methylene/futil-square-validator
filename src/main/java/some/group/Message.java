@@ -1,36 +1,39 @@
 package some.group;
 
-import static java.lang.String.format;
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import static javax.faces.application.FacesMessage.SEVERITY_INFO;
 import static javax.faces.application.FacesMessage.SEVERITY_WARN;
 
-import java.io.Serializable;
+import java.text.MessageFormat;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.application.FacesMessage.Severity;
 
-public class Message implements Serializable {
+public final class Message {
 
 	private Message() {
 	}
 
-	private static final long serialVersionUID = 2L;
-
-	public static final FacesMessage infoMesg(final IKey message) {
-		return new FacesMessage(SEVERITY_INFO, message.getLabel(), message.getLabel());
+	public static FacesMessage infoMesg(final IKey message, final Object... params) {
+		return _mesg(message, SEVERITY_INFO, params);
 	}
 
-	public static final FacesMessage warnMesg(final IKey message) {
-		return new FacesMessage(SEVERITY_WARN, message.getLabel(), message.getLabel());
+	public static FacesMessage warnMesg(final IKey message, final Object... params) {
+		return _mesg(message, SEVERITY_WARN, params);
 	}
 
-	public static final FacesMessage errMesg(final IKey message) {
-		return new FacesMessage(SEVERITY_ERROR, message.getLabel(), message.getLabel());
+	public static FacesMessage errMesg(final IKey message, final Object... params) {
+		return _mesg(message, SEVERITY_ERROR, params);
 	}
-	
-	public static final FacesMessage errMesg(final IKey message, final String label) {
-		final String msgString = format("%s: %s", label, message.getLabel());
-		return new FacesMessage(SEVERITY_ERROR, msgString, msgString);
+
+	private static FacesMessage _mesg(final IKey message, Severity severity, final Object... params) {
+		final String msgFormat = message.getLabel();
+		if (params == null || params.length == 0) {
+			return new FacesMessage(severity, msgFormat, msgFormat);
+		} else {
+			final String msg = new MessageFormat(msgFormat).format(params);
+			return new FacesMessage(severity, msg, msg);
+		}
 	}
 
 }
