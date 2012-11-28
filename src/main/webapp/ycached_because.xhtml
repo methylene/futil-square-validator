@@ -1,0 +1,32 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:sg="http://some-group.com/tags"
+	template="/WEB-INF/template/super.xhtml">
+	
+	<ui:define name="main">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+		<script>/*<![CDATA[*/
+	
+	jQuery(function($) {
+		setTimeout(function() {
+			window.location.reload();
+		}, 500);
+	});
+	
+		/*]]>*/</script>
+	
+		<div class="span-24">
+		
+		<h3 class="info" style="margin-top:6px">Post successful. Please wait, page will reload automatically.</h3>
+		
+		<h1 style="margin-top:12px">ycachedBean.count = #{ycachedBean['count']}</h1>
+		<h3 style="margin-top:4px">facesContext.attributes.count = #{facesContext['attributes']['count']}</h3>
+		
+		</div>
+		
+	</ui:define>
+	
+</ui:composition>
