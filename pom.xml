@@ -55,7 +55,7 @@
 		<dependency>
 			<groupId>org.meth4j.futil</groupId>
 			<artifactId>futil</artifactId>
-			<version>0.3.5</version>
+			<version>0.3.6</version>
 		</dependency>
 
 	</dependencies>
