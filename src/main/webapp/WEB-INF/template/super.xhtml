@@ -57,6 +57,11 @@ ul li {margin:0;padding:0}
 <div class="container">
 	<div class="span-24"  style="margin:20px 0">
 	<h:messages globalOnly="true" errorClass="error" infoClass="info" />
+	<h4 style="margin-bottom: 4px">Restored view id: #{facesContext.attributes['org.meth4j.jsf.VR_FROM_CACHE']}</h4>
+	<h4 style="margin-bottom: 4px">Rendered view id: #{facesContext.viewRoot.viewId}</h4>
+	<ui:fragment rendered="#{facesContext.attributes['org.meth4j.jsf.VR_FROM_CACHE'] ne facesContext.viewRoot.viewId}">
+		<div class="notice"><div>restored view id != rendered view id; cache not effective?</div></div>
+	</ui:fragment>
 	<h4 style="margin-bottom: 4px">Phases run:</h4>
 	<ul class="info">
 	<ui:repeat var="phase" value="#{facesContext['attributes']['org.meth4j.jsf.PHASE_TRACKER']['phaseIds']}">

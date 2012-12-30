@@ -7,17 +7,21 @@ import static javax.faces.event.PhaseId.ANY_PHASE;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 
 import com.google.common.collect.ImmutableList;
+import com.industrieit.jsf.stateless.impl.SJSFStatePool;
+import com.industrieit.jsf.stateless.impl.SJSFURIBuilder;
 
 public class PhaseTrackingListener implements PhaseListener {
 	
 	private static final long serialVersionUID = 14L;
 	private static final String TRACKER = "org.meth4j.jsf.PHASE_TRACKER";
+	private static final String VR_FROM_CACHE = "org.meth4j.jsf.VR_FROM_CACHE";
 	
 	public static class PhaseTracker {
 		
@@ -58,6 +62,13 @@ public class PhaseTrackingListener implements PhaseListener {
 	}
 
 	@Override public void beforePhase(PhaseEvent evt) {
+		if (evt.getPhaseId().equals(PhaseId.RESTORE_VIEW)) {
+			final UIViewRoot vr = SJSFStatePool.get(SJSFURIBuilder.getURI());
+			final String fromCache = vr == null ? "--none--" : vr.getViewId();
+			final FacesContext fc = evt.getFacesContext();
+			final Map<Object, Object> attrs = fc.getAttributes();
+			attrs.put(VR_FROM_CACHE, fromCache);
+		}
 		PhaseTracker.track(evt);
 	}
 
