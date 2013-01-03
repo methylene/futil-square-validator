@@ -23,11 +23,11 @@ import javax.servlet.http.HttpServletRequest;
 public class SJSFURIBuilder {
 
 	public static String getURI() {
-		HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
+		final HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
 				.getRequest();
 		String uri = req.getRequestURI();
 		//truncate any jsessionid
-		int ind = uri.indexOf(";");
+		final int ind = uri.indexOf(';');
 		if (ind >= 0) {
 			uri = uri.substring(0, ind);
 		}

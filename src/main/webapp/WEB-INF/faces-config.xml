@@ -31,8 +31,8 @@
 
 	<lifecycle>
 
-		<phase-listener>com.industrieit.jsf.stateless.impl.SJSFPhaseListener</phase-listener>
-<!-- 		<phase-listener>org.meth4j.jsf.SJSFPhaseListener</phase-listener> -->
+<!-- 		<phase-listener>com.industrieit.jsf.stateless.impl.SJSFPhaseListener</phase-listener> -->
+		<phase-listener>org.meth4j.jsf.SJSFPhaseListener</phase-listener>
 		<phase-listener>some.group.MessageListener</phase-listener>
 		<phase-listener>org.meth4j.jsf.PhaseTrackingListener</phase-listener>
 

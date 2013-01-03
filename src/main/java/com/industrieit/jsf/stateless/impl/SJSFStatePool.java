@@ -43,8 +43,10 @@ public class SJSFStatePool {
 	private static final Map<String, LinkedList<UIViewRoot>> ppool = new ConcurrentHashMap<String, LinkedList<UIViewRoot>>();
 	private static final Map<String, String> discriminatorMap = new ConcurrentHashMap<String, String>();
 
-	private static final Logger log = LoggerFactory.getLogger(SJSFStatePool.class);
+	private static final Logger LOG = LoggerFactory.getLogger(SJSFStatePool.class);
 	private static final ExecutorService exServ = createExServ();
+	
+	private static final String VR_FROM_CACHE = "com.industrieit.jsf.stateless.impl.VR_FROM_CACHE";
 
 	private static ExecutorService createExServ(){
 		final ThreadFactory tf = new ThreadFactory() {
@@ -57,27 +59,40 @@ public class SJSFStatePool {
 		final BlockingQueue<Runnable> q = new LinkedBlockingQueue<Runnable>(250);
 		return new ThreadPoolExecutor(1, 3, 30l, TimeUnit.SECONDS, q, tf, new ThreadPoolExecutor.CallerRunsPolicy());
 	}
+	
+	public static UIViewRoot getViewRoot(FacesContext fc, String uri) {
+		final UIViewRoot vr = get(uri);
+		if (vr != null) {
+			final Map<Object, Object> attrs = fc.getAttributes();
+			attrs.put(VR_FROM_CACHE, vr.getViewId());
+		}
+		return vr;
+	}
 
-	public static synchronized UIViewRoot get(String uri) {
+
+	private static synchronized UIViewRoot get(String uri) {
 		final String discrimValue = getDiscriminatorValue(uri, null);
 		final LinkedList<UIViewRoot> items = getPoolForKey(uri, discrimValue);
 
 		UIViewRoot v = null;
 		synchronized (items) {
 			if (items.isEmpty()) {
+				LOG.warn("{}: no items, returning null...", uri);
 				return null;
-			}
-			if (items.size() == 1) {
-				try {
-					//clone
-					final Cloner cloner = new Cloner();
-					v = cloner.deepClone(items.getFirst());
-					log.warn("cloning..." + v.getViewId() + ".....");
-				} catch (final Exception e) {
-					log.error("error force cloning view on postback", e);
-				}
 			} else {
-				v = (UIViewRoot) items.removeFirst();
+				if (items.size() == 1) {
+					try {
+						//clone
+						final Cloner cloner = new Cloner();
+						v = cloner.deepClone(items.getFirst());
+						LOG.warn("cloning in request thread..." + v.getViewId() + ".....");
+					} catch (final Exception e) {
+						LOG.error("error force cloning view on postback", e);
+					}
+				} else {
+					v = (UIViewRoot) items.removeFirst();
+					LOG.warn("returning..." + v.getViewId() + ".....");
+				}
 			}
 		}
 		//long intime=(Long) v.getAttributes().get(SJSFStatics.INPOOL);
@@ -96,7 +111,7 @@ public class SJSFStatePool {
 		ppool.clear();
 	}
 
-	private static LinkedList<UIViewRoot> getPoolForKey(String uri, String discrim) {
+	public static LinkedList<UIViewRoot> getPoolForKey(String uri, String discrim) {
 		final String k = constructCompositeKey(uri, discrim);
 		LinkedList<UIViewRoot> items = (LinkedList<UIViewRoot>) ppool.get(k);
 		if (items == null) {

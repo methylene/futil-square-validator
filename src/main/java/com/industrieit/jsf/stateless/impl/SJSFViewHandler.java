@@ -25,44 +25,55 @@ import javax.faces.FacesException;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
+import org.slf4j.Logger;
+
 import com.sun.faces.application.view.MultiViewHandler;
 
 public class SJSFViewHandler extends MultiViewHandler {
 
+	private static final Logger LOG = getLogger(SJSFViewHandler.class);
+
 	@Override public UIViewRoot createView(FacesContext context, String viewId) {
-		final String uri = getURI();
+		final String uri = getURI(context);
 		UIViewRoot vr = null;
 		synchronized (this) {
-			//System.out.println("vh create view");
 			final int poolCount = SJSFStatePool.getPoolCount(uri);
 			if (poolCount > SJSFStatics.POST_BUFFER) {
-				vr = SJSFStatePool.get(uri);
-			} else {
-				getLogger(getClass()).info("{}: poolCount < POST_BUFFER; poolCount={}", viewId, poolCount);
-			}
-			if (vr != null) {
+				vr = SJSFStatePool.getViewRoot(context, uri);
+				if (LOG.isDebugEnabled()) {
+					final Object[] olog = new Object[] { viewId, poolCount, context.getCurrentPhaseId() };
+					LOG.debug("{}: SJSF cache hit in createView; poolCount={}; phase={}", olog);
+				}
 				context.setViewRoot(vr);
 			} else {
 				vr = super.createView(context, viewId);
+				if (LOG.isDebugEnabled()) {
+					final Object[] olog = new Object[] { viewId, poolCount, context.getCurrentPhaseId() };
+					LOG.debug("{}: poolCount < POST_BUFFER in createView; poolCount={}; phase={}", olog);
+				}
 			}
 		}
 		return vr;
 	}
 
 	@Override public void initView(FacesContext context) throws FacesException {
-		//System.out.println("vh init view");
-		final String uri = getURI();
+		final String uri = getURI(context);
+		final int poolCount = SJSFStatePool.getPoolCount(uri);
 		UIViewRoot vr = null;
-		if (context.isPostback() || SJSFStatePool.getPoolCount(uri) > SJSFStatics.POST_BUFFER) {
-			vr = SJSFStatePool.get(uri);
-			if (vr == null) {
-				getLogger(getClass()).info("{}: SJSF cache miss", SJSFURIBuilder.getURI());
+		if (context.isPostback() || poolCount > SJSFStatics.POST_BUFFER) {
+			vr = SJSFStatePool.getViewRoot(context, uri);
+			if (vr != null) {
+				context.setViewRoot(vr);
+				if (LOG.isDebugEnabled()) {
+					final Object[] olog = new Object[] { vr.getViewId(), poolCount, context.getCurrentPhaseId() };
+					LOG.debug("{}: SJSF cache hit in initView; poolCount={}; phase={}", olog);
+				}
 			} else {
-				getLogger(getClass()).info("{}: SJSF cache hit", SJSFURIBuilder.getURI());
+				if (LOG.isDebugEnabled()) {
+					final Object[] olog = new Object[] { uri, poolCount, context.getCurrentPhaseId() };
+					LOG.debug("{}: SJSF cache miss in initView; poolCount={}", olog);
+				}
 			}
-		}
-		if (vr != null) {
-			context.setViewRoot(vr);
 		}
 		super.initView(context);
 	}
@@ -72,13 +83,14 @@ public class SJSFViewHandler extends MultiViewHandler {
 		if (SJSFUtil.isPoolable(context.getViewRoot())) {
 			super.writeState(context);
 		} else {
-			//System.out.println("vh write state");
 			super.writeState(context);
 		}
 	}
 
-	private String getURI() {
-		return SJSFURIBuilder.getURI();
+	private String getURI(FacesContext context) {
+		final String uri = SJSFURIBuilder.getURI();
+//		LOG.debug("uri={}, viewId={}",uri, context.getViewRoot() == null ? "null":  context.getViewRoot().getViewId());
+		return uri;
 	}
 
 }

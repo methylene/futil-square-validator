@@ -49,7 +49,9 @@ public class SJSFCleanTask implements Runnable {
 
 	public void run() {
 		try {
-			root.getAttributes().put(SJSFStatics.INPOOL, System.currentTimeMillis());
+			if (root.getAttributes().get(SJSFStatics.INPOOL) == null) {
+				root.getAttributes().put(SJSFStatics.INPOOL, System.currentTimeMillis());
+			}
 			try {
 				final long del = REISSUE_DELAY_MS - (System.currentTimeMillis() - timeIn);
 				if (del > 0) {

@@ -85,17 +85,11 @@ public class SJSFStateManager extends com.sun.faces.application.StateManagerImpl
 		UIViewRoot vr = null;
 		if (SJSFUtil.isPoolable(context.getViewRoot())) {
 			final String uri = getURI();
-			vr = SJSFStatePool.get(uri);
-			if (vr == null) {
-				getLogger(getClass()).info("{}: miss", viewId);
-			} else {
-				getLogger(getClass()).info("{}: hit", viewId);
-			}
+			vr = SJSFStatePool.getViewRoot(context, uri);
 		} else {
-			getLogger(getClass()).info("{}: not poolable", viewId);
-			//System.out.println("restore view");
 			vr = super.restoreView(context, viewId, renderKitId);
 		}
+		System.out.println("OALLALL ASKJDhKJHASDKJHSAD");
 		return vr;
 	}
 
